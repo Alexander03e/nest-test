@@ -2,11 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto, LoginUserDto } from '@app/user/dto/create-user.dto';
 import { User } from '@app/user/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { IUserResponse } from '@app/user/types/user-response.interface';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from '@app/user/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,17 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
   ) {}
+
+  async update(id: number, data: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
+    }
+
+    Object.assign(user, data);
+    return await this.userRepository.save(user);
+  }
 
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
