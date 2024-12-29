@@ -19,9 +19,14 @@ export class UserService {
     return await this.userRepository.find();
   }
 
+  async findById(id: number): Promise<User> {
+    return this.userRepository.findOne({ where: { id } });
+  }
+
   async verifyUser(user: LoginUserDto): Promise<IUserResponse> {
-    const userByEmail = await this.userRepository.findOneBy({
-      email: user.email,
+    const userByEmail = await this.userRepository.findOne({
+      where: { email: user.email },
+      select: ['id', 'email', 'username', 'password', 'image', 'bio'],
     });
 
     if (!userByEmail) {
@@ -34,6 +39,7 @@ export class UserService {
       throw new HttpException('Пароль не верный', HttpStatus.UNAUTHORIZED);
     }
 
+    delete userByEmail.password;
     return this.buildResponse(userByEmail);
   }
 

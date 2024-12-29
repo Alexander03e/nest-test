@@ -18,7 +18,7 @@ export class User {
   @Column({ default: '' })
   image: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   //Будет вызвана до того, как сущность будет вставлена в базу данных
