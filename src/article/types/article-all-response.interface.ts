@@ -1,7 +1,7 @@
-import { ArticleResponse } from '@app/article/types/article-response.interface';
+import { ArticleType } from '@app/article/types/article.type';
 
 export interface ArticleAllResponse {
-  articles: ArticleResponse[];
+  articles: ArticleType[];
   total: number;
   totalOnPage?: number;
 }

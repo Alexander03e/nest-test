@@ -67,4 +67,19 @@ export class ArticleController {
   ): Promise<ArticleEntity> {
     return await this.articleService.update(id, slug, data);
   }
+
+  @Post(':slug/like')
+  @UseGuards(AuthGuard)
+  async addToFavorite(@User('id') userId: number, @Param('slug') slug: string) {
+    return await this.articleService.addToFavorite(userId, slug);
+  }
+
+  @Post(':slug/dislike')
+  @UseGuards(AuthGuard)
+  async removeFromFavorite(
+    @User('id') userId: number,
+    @Param('slug') slug: string,
+  ) {
+    return await this.articleService.removeFromFavorite(userId, slug);
+  }
 }

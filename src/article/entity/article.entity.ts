@@ -2,10 +2,12 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '@app/user/entity/user.entity';
+import { JoinTable } from 'typeorm';
 
 @Entity({ name: 'articles' })
 export class ArticleEntity {
