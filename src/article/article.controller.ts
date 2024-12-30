@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -18,6 +19,7 @@ import { User as UserEntity } from '@app/user/entity/user.entity';
 import { ArticleResponse } from '@app/article/types/article-response.interface';
 import { ArticleEntity } from '@app/article/entity/article.entity';
 import { ArticleUpdateDto } from '@app/article/dto/article-update.dto';
+import { ArticleAllResponse } from '@app/article/types/article-all-response.interface';
 
 @Controller('article')
 export class ArticleController {
@@ -30,8 +32,11 @@ export class ArticleController {
   }
 
   @Get()
-  async findAll() {
-    return await this.articleService.findAll();
+  async findAll(
+    @User('id') userId: number,
+    @Query() query: any,
+  ): Promise<ArticleAllResponse> {
+    return await this.articleService.findAll(userId, query);
   }
 
   @Post()
